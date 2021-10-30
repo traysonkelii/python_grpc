@@ -3,11 +3,13 @@
 This lab was implemented via `python 3.8.5`. 
 
 ## How to use
-- Place a formatted json file named `input.json` in the root directory. The json object should contain an equal number of customer and branch processes. There should be a one to one mapping between `customer id` and `branch id`. All starting `balance`'s of any `branch` referenced should be the same amount upon starting the application. (example can be found below)
+- Place a formatted json file named `input.json` in the root directory (note that one is already provided in this repository). The json object should contain an equal number of customer and branch processes. There should be a one to one mapping between `customer id` and `branch id`. All starting `balance`'s of any `branch` referenced should be the same amount upon starting the application. (example can be found below)
 - run the following sequences of python commands from the root directory to execute the program to initialize the branches:
 ```
+# generates the pb2 files
 python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. bank.proto
 
+# dynamically creates the branches on separate ports
 python create_branches.py
 ```
 (on a separate terminal run the following command)
