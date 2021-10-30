@@ -48,7 +48,7 @@ python execute_customer_events.py
 
 ## Extra Testing
 
-After running `python execute_customer_events.py` you can further test the individual operations (Withdraw, Deposit, and Query) by executing the following commands (note that the specific setup defined for the input.json will be `50051`, `50052`, and `50053`): 
+After running `python create_branches.py` you can further test the individual operations (Withdraw, Deposit, and Query) by executing the following commands (note that the specific setup defined for the input.json will be `50051`, `50052`, and `50053`): 
 
 Withdraw
 ```
