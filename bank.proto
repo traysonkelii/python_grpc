@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+service Bank {
+    rpc Withdraw (GeneralRequest) returns (GeneralReply) {}
+    rpc Deposit (GeneralRequest) returns (GeneralReply) {}
+    rpc Query (GeneralRequest) returns (QueryReply) {}
+    rpc BranchDeposit (BranchRequest) returns (BranchResponse) {}
+    rpc BranchWithdraw (BranchRequest) returns (BranchResponse) {}
+}
+
+message GeneralReply {
+    string interface = 1;
+    string result = 2;
+}
+
+message GeneralRequest {
+    string interface = 1;
+    int32 money = 2;
+}
+
+message QueryReply {
+    string interface = 1;
+    string result = 2;
+    int32 money = 3;
+}
+
+message BranchRequest{
+    int32 money = 1;
+}
+
+message BranchResponse {
+    string message = 1;
+}
