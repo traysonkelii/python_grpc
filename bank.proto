@@ -11,23 +11,31 @@ service Bank {
 message GeneralReply {
     string interface = 1;
     string result = 2;
+    string executions = 3;
 }
 
 message GeneralRequest {
     string interface = 1;
     int32 money = 2;
+    int32 id = 3;
+    int32 clock = 4;
 }
 
 message QueryReply {
     string interface = 1;
     string result = 2;
     int32 money = 3;
+    string executions = 4;
 }
 
 message BranchRequest{
     int32 money = 1;
+    int32 clock = 2;
+    int32 id = 3;
 }
 
 message BranchResponse {
     string message = 1;
+    int32 clock = 2;
+    string executions = 3;
 }

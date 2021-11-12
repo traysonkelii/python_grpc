@@ -1,4 +1,4 @@
-# gRPC Lab
+# Logical Clock Lab
 
 This lab was implemented via `python 3.8.5`. 
 
@@ -14,9 +14,9 @@ python create_branches.py
 ```
 (on a separate terminal run the following command)
 ```
-python execute_customer_events.py
+python execute_input.py
 ```
-- Upon completion an `output.json` will be generated and with the corresponding transaction status
+- Upon completion an `output.json` will be generated with  the logical clock representation (partitioned between the processes and the events of a given client request).
 
 ## Example Input
 ```
@@ -41,26 +41,134 @@ python execute_customer_events.py
 
 ## Example Output
 ```
-{'id': 1, 'recv': [{'interface': 'query', 'result': 'success', 'money': 500}]}
-  {'id': 2, 'recv': [{'interface': 'deposit', 'result': 'success'}, {'interface': 'query', 'result': 'success', 'money': 500}]}
-  {'id': 3, 'recv': [{'interface': 'withdraw', 'result': 'success'}, {'interface': 'query', 'result': 'success', 'money': 500}]}
+[
+    {
+      "pid": 1,
+      "data": [
+        { "id": 4, "name": "withdraw_propagate_request", "clock": 4 },
+        { "id": 4, "name": "withdraw_propagate_execute", "clock": 5 },
+        { "id": 2, "name": "deposit_propagate_request", "clock": 6 },
+        { "id": 2, "name": "deposit_propagate_execute", "clock": 7 }
+      ]
+    },
+    {
+      "pid": 2,
+      "data": [
+        { "id": 2, "name": "deposit_request", "clock": 2 },
+        { "id": 2, "name": "deposit_execute", "clock": 3 },
+        { "id": 2, "name": "deposit_propagate_response", "clock": 8 },
+        { "id": 4, "name": "withdraw_propagate_request", "clock": 9 },
+        { "id": 4, "name": "withdraw_propagate_execute", "clock": 10 },
+        { "id": 2, "name": "deposit_propagate_response", "clock": 15 },
+        { "id": 2, "name": "deposit_response", "clock": 16 }
+      ]
+    },
+    {
+      "pid": 3,
+      "data": [
+        { "id": 4, "name": "withdraw_request", "clock": 2 },
+        { "id": 4, "name": "withdraw_execute", "clock": 3 },
+        { "id": 4, "name": "withdraw_propagate_response", "clock": 6 },
+        { "id": 4, "name": "withdraw_propagate_response", "clock": 11 },
+        { "id": 4, "name": "withdraw_response", "clock": 12 },
+        { "id": 2, "name": "deposit_propagate_request", "clock": 13 },
+        { "id": 2, "name": "deposit_propagate_execute", "clock": 14 }
+      ]
+    },
+    {
+      "eventId": 4,
+      "data": [
+        { "clock": 2, "name": "withdraw_request" },
+        { "clock": 3, "name": "withdraw_execute" },
+        { "clock": 4, "name": "withdraw_propagate_request" },
+        { "clock": 5, "name": "withdraw_propagate_execute" },
+        { "clock": 6, "name": "withdraw_propagate_response" },
+        { "clock": 9, "name": "withdraw_propagate_request" },
+        { "clock": 10, "name": "withdraw_propagate_execute" },
+        { "clock": 11, "name": "withdraw_propagate_response" },
+        { "clock": 12, "name": "withdraw_response" }
+      ]
+    },
+    {
+      "eventId": 2,
+      "data": [
+        { "clock": 2, "name": "deposit_request" },
+        { "clock": 3, "name": "deposit_execute" },
+        { "clock": 6, "name": "deposit_propagate_request" },
+        { "clock": 7, "name": "deposit_propagate_execute" },
+        { "clock": 8, "name": "deposit_propagate_response" },
+        { "clock": 13, "name": "deposit_propagate_request" },
+        { "clock": 14, "name": "deposit_propagate_execute" },
+        { "clock": 15, "name": "deposit_propagate_response" },
+        { "clock": 16, "name": "deposit_response" }
+      ]
+    }
+  ]
+  
 ```
 
-## Extra Testing
+## Output disparity
 
-After running `python create_branches.py` you can further test the individual operations (Withdraw, Deposit, and Query) by executing the following commands (note that the specific setup defined for the input.json will be `50051`, `50052`, and `50053`): 
+Note that running this command multiple times will produce different results mainly due to the race conditions implemented in the aggregation step of the client calls. While the output may not have all the logical ticks recorded by a certain process, the sequential nature and integrity of the global clock is preserved. View an example of an output missing data below:
 
-Withdraw
 ```
-python withdraw.py [PORT] [AMOUNT_TO_WITHDRAW]
-```
-
-Deposit
-```
-python withdraw.py [PORT] [AMOUNT_TO_DEPOSIT]
-```
-
-Query
-```
-python withdraw.py [PORT] [PLACE_HOLDER_AMOUNT]
+[
+    {
+      "pid": 1,
+      "data": [
+        { "id": 4, "name": "withdraw_propagate_request", "clock": 4 },
+        { "id": 4, "name": "withdraw_propagate_execute", "clock": 5 },
+        { "id": 2, "name": "deposit_propagate_request", "clock": 6 },
+        { "id": 2, "name": "deposit_propagate_execute", "clock": 7 }
+      ]
+    },
+    {
+      "pid": 2,
+      "data": [
+        { "id": 2, "name": "deposit_request", "clock": 2 },
+        { "id": 2, "name": "deposit_execute", "clock": 3 },
+        { "id": 2, "name": "deposit_propagate_response", "clock": 8 },
+        { "id": 4, "name": "withdraw_propagate_request", "clock": 9 },
+        { "id": 4, "name": "withdraw_propagate_execute", "clock": 10 },
+        { "id": 2, "name": "deposit_propagate_response", "clock": 15 },
+        { "id": 2, "name": "deposit_response", "clock": 16 }
+      ]
+    },
+    {
+      "pid": 3,
+      "data": [
+        { "id": 4, "name": "withdraw_request", "clock": 2 },
+        { "id": 4, "name": "withdraw_execute", "clock": 3 },
+        { "id": 4, "name": "withdraw_propagate_response", "clock": 6 },
+        { "id": 4, "name": "withdraw_propagate_response", "clock": 11 },
+        { "id": 4, "name": "withdraw_response", "clock": 12 }
+      ]
+    },
+    {
+      "eventId": 4,
+      "data": [
+        { "clock": 2, "name": "withdraw_request" },
+        { "clock": 3, "name": "withdraw_execute" },
+        { "clock": 4, "name": "withdraw_propagate_request" },
+        { "clock": 5, "name": "withdraw_propagate_execute" },
+        { "clock": 6, "name": "withdraw_propagate_response" },
+        { "clock": 9, "name": "withdraw_propagate_request" },
+        { "clock": 10, "name": "withdraw_propagate_execute" },
+        { "clock": 11, "name": "withdraw_propagate_response" },
+        { "clock": 12, "name": "withdraw_response" }
+      ]
+    },
+    {
+      "eventId": 2,
+      "data": [
+        { "clock": 2, "name": "deposit_request" },
+        { "clock": 3, "name": "deposit_execute" },
+        { "clock": 6, "name": "deposit_propagate_request" },
+        { "clock": 7, "name": "deposit_propagate_execute" },
+        { "clock": 8, "name": "deposit_propagate_response" },
+        { "clock": 15, "name": "deposit_propagate_response" },
+        { "clock": 16, "name": "deposit_response" }
+      ]
+    }
+  ]
 ```

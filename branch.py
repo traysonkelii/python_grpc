@@ -3,7 +3,6 @@ import bank_pb2
 import bank_pb2_grpc
 import time
 from concurrent import futures
-from google.protobuf import message
 
 class Branch(bank_pb2_grpc.BankServicer):
 
@@ -12,32 +11,79 @@ class Branch(bank_pb2_grpc.BankServicer):
         self.balance = balance
         self.branches = branches
         self.stubList = self.CreateStubs(self.branches)
+        self.clock = 0
+        self.executions = []
 
     def Deposit(self, request, context):
+        # Event_Request
+        self.clock = max(self.clock, request.clock) + 1
+        self.executions.append({"id": request.id, "name": "deposit_request", "clock": self.clock})
+
+        # Event_Execute
         self.balance += int(request.money)
-        # notifies other branches of updates
+        self.clock += 1
+        self.executions.append({"id": request.id, "name": "deposit_execute", "clock": self.clock})
+
         for stub in self.stubList:
-            stub.BranchDeposit(bank_pb2.BranchRequest(money=request.money))
-        return bank_pb2.GeneralReply(interface='deposit', result= 'success')
+            #Propagate_Request
+            fellow = stub.BranchDeposit(bank_pb2.BranchRequest(money=request.money, clock=self.clock, id=request.id))
+
+            # Propagate_Response 
+            self.clock = max(self.clock, fellow.clock) + 1
+            self.executions.append({"id": request.id, "name": "deposit_propagate_response", "clock": self.clock})
+
+        # Event_Response 
+        self.clock += 1
+        self.executions.append({"id": request.id, "name": "deposit_response", "clock": self.clock})
+        return bank_pb2.GeneralReply(interface='deposit', result= 'success', executions=str(self.executions))
 
     def Withdraw(self, request, context):
+        # Event_Request
+        self.clock = max(self.clock, request.clock) + 1
+        self.executions.append({"id": request.id, "name": "withdraw_request", "clock": self.clock})
+
+        # Event_Request
         self.balance -= request.money
-        # notifies other branches of updates
+        self.clock += 1
+        self.executions.append({"id": request.id, "name": "withdraw_execute", "clock": self.clock})
+   
         for stub in self.stubList:
-            stub.BranchWithdraw(bank_pb2.BranchRequest(money=request.money))
-        return bank_pb2.GeneralReply(interface='withdraw', result= 'success')
+            fellow = stub.BranchWithdraw(bank_pb2.BranchRequest(money=request.money, clock=self.clock, id=request.id))
+            
+            # Propagate_Response 
+            self.clock = max(self.clock, fellow.clock) + 1
+            self.executions.append({"id": request.id, "name": "withdraw_propagate_response", "clock": self.clock})
+
+        # Event_Response 
+        self.clock += 1
+        self.executions.append({"id": request.id, "name": "withdraw_response", "clock": self.clock})
+        return bank_pb2.GeneralReply(interface='withdraw', result= 'success', executions=str(self.executions))
+
+    def BranchDeposit(self, request, context):
+        #Propagate_Request     
+        self.clock = max(self.clock, request.clock) + 1
+        self.executions.append({"id": request.id, "name": "deposit_propagate_request", "clock": self.clock})
+        self.balance += int(request.money)
+        
+        #Propagate_Execute     
+        self.clock += 1
+        self.executions.append({"id": request.id, "name": "deposit_propagate_execute", "clock": self.clock})
+        return bank_pb2.BranchResponse(message='success', clock=self.clock, executions=str(self.executions))
+
+    def BranchWithdraw(self, request, context):
+        #Propagate_Request     
+        self.clock = max(self.clock, request.clock) + 1
+        self.executions.append({"id": request.id, "name": "withdraw_propagate_request", "clock": self.clock})
+        self.balance -= request.money
+
+        #Propagate_Execute     
+        self.clock += 1
+        self.executions.append({"id": request.id, "name": "withdraw_propagate_execute", "clock": self.clock})
+        return bank_pb2.BranchResponse(message='success', clock=self.clock, executions=str(self.executions))
 
     def Query(self, request, context):
         time.sleep(3)
-        return bank_pb2.QueryReply(interface='query', result='success', money=self.balance)
-
-    def BranchDeposit(self, request, context):
-        self.balance += int(request.money)
-        return bank_pb2.BranchResponse(message='success')
-
-    def BranchWithdraw(self, request, context):
-        self.balance -= request.money
-        return bank_pb2.BranchResponse(message='success')
+        return bank_pb2.QueryReply(interface='query', result='success', money=self.balance, executions=str(self.executions))
 
     def CreateStubs(self, branches):
         stubs = []

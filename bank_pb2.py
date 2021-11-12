@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nbank.proto\"1\n\x0cGeneralReply\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\"2\n\x0eGeneralRequest\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\r\n\x05money\x18\x02 \x01(\x05\">\n\nQueryReply\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"\x1e\n\rBranchRequest\x12\r\n\x05money\x18\x01 \x01(\x05\"!\n\x0e\x42ranchResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\xf3\x01\n\x04\x42\x61nk\x12,\n\x08Withdraw\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12+\n\x07\x44\x65posit\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12\'\n\x05Query\x12\x0f.GeneralRequest\x1a\x0b.QueryReply\"\x00\x12\x32\n\rBranchDeposit\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x12\x33\n\x0e\x42ranchWithdraw\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\nbank.proto\"E\n\x0cGeneralReply\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\x12\x12\n\nexecutions\x18\x03 \x01(\t\"M\n\x0eGeneralRequest\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\r\n\x05money\x18\x02 \x01(\x05\x12\n\n\x02id\x18\x03 \x01(\x05\x12\r\n\x05\x63lock\x18\x04 \x01(\x05\"R\n\nQueryReply\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\x12\x12\n\nexecutions\x18\x04 \x01(\t\"9\n\rBranchRequest\x12\r\n\x05money\x18\x01 \x01(\x05\x12\r\n\x05\x63lock\x18\x02 \x01(\x05\x12\n\n\x02id\x18\x03 \x01(\x05\"D\n\x0e\x42ranchResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05\x63lock\x18\x02 \x01(\x05\x12\x12\n\nexecutions\x18\x03 \x01(\t2\xf3\x01\n\x04\x42\x61nk\x12,\n\x08Withdraw\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12+\n\x07\x44\x65posit\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12\'\n\x05Query\x12\x0f.GeneralRequest\x1a\x0b.QueryReply\"\x00\x12\x32\n\rBranchDeposit\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x12\x33\n\x0e\x42ranchWithdraw\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x62\x06proto3'
 )
 
 
@@ -47,6 +47,13 @@ _GENERALREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='executions', full_name='GeneralReply.executions', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -60,7 +67,7 @@ _GENERALREPLY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=14,
-  serialized_end=63,
+  serialized_end=83,
 )
 
 
@@ -86,6 +93,20 @@ _GENERALREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='id', full_name='GeneralRequest.id', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='clock', full_name='GeneralRequest.clock', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -98,8 +119,8 @@ _GENERALREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=65,
-  serialized_end=115,
+  serialized_start=85,
+  serialized_end=162,
 )
 
 
@@ -132,6 +153,13 @@ _QUERYREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='executions', full_name='QueryReply.executions', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -144,8 +172,8 @@ _QUERYREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=117,
-  serialized_end=179,
+  serialized_start=164,
+  serialized_end=246,
 )
 
 
@@ -164,6 +192,20 @@ _BRANCHREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='clock', full_name='BranchRequest.clock', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='id', full_name='BranchRequest.id', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -176,8 +218,8 @@ _BRANCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=181,
-  serialized_end=211,
+  serialized_start=248,
+  serialized_end=305,
 )
 
 
@@ -196,6 +238,20 @@ _BRANCHRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='clock', full_name='BranchResponse.clock', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='executions', full_name='BranchResponse.executions', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -208,8 +264,8 @@ _BRANCHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=213,
-  serialized_end=246,
+  serialized_start=307,
+  serialized_end=375,
 )
 
 DESCRIPTOR.message_types_by_name['GeneralReply'] = _GENERALREPLY
@@ -263,8 +319,8 @@ _BANK = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=249,
-  serialized_end=492,
+  serialized_start=378,
+  serialized_end=621,
   methods=[
   _descriptor.MethodDescriptor(
     name='Withdraw',

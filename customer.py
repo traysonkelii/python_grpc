@@ -22,22 +22,24 @@ class Customer:
         for event in self.events:
             interface = event.interface
             money = event.money
-            responses.append(self.commandMapping(interface, money))
+            id = event.id
+            responses.append(self.commandMapping(interface, money, id))
         return responses
 
-    def commandMapping(self, interface, money):
+    def commandMapping(self, interface, money, id):
         formatted = {}
         if(interface == 'withdraw'):
-            response = self.stub.Withdraw(bank_pb2.GeneralRequest(interface='withdraw', money=int(money)))
+            response = self.stub.Withdraw(bank_pb2.GeneralRequest(interface='withdraw', money=int(money), id=id, clock=1))
             formatted['interface'] = response.interface
             formatted['result'] = response.result
         if(interface == 'deposit'):
-            response = self.stub.Deposit(bank_pb2.GeneralRequest(interface='deposit', money=int(money)))
+            response = self.stub.Deposit(bank_pb2.GeneralRequest(interface='deposit', money=int(money), id=id, clock=1))
             formatted['interface'] = response.interface
             formatted['result'] = response.result
         if(interface == 'query'):
-            response = self.stub.Query(bank_pb2.GeneralRequest(interface='query', money=int(money)))
+            response = self.stub.Query(bank_pb2.GeneralRequest(interface='query', money=int(money), id=id, clock=1))
             formatted['interface'] = response.interface
             formatted['result'] = response.result
             formatted['money'] = response.money
+        formatted['exec'] = response.executions
         return formatted
