@@ -29,7 +29,7 @@ class Branch(bank_pb2_grpc.BankServicer):
 
     def Query(self, request, context):
         time.sleep(3)
-        return bank_pb2.QueryReply(interface='query', result='success', money=self.balance)
+        return bank_pb2.QueryReply(id=str(request.id), money=self.balance)
 
     def BranchDeposit(self, request, context):
         self.balance += int(request.money)

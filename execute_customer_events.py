@@ -30,13 +30,8 @@ for i in range(len(customers)):
 for i in range(len(threads)):
   threads[i].join()
 
-output = []
 for i in range(len(results)):
-  result = {}
-  # offset due to zero indexing
-  result['id'] = i+1
-  result['recv'] = results[i]
-  output.append(result)
+  output = results[i]
   with open('output.json', 'w') as outfile:
     json.dump(output, outfile)
 

@@ -11,7 +11,7 @@ with open('input.json') as f:
 branches = []
 ids = []
 for object in data:
-    if(object.type == 'branch'):
+    if(object.type == 'bank'):
         branches.append(object)
         ids.append(object.id)
 

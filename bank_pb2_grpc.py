@@ -26,7 +26,7 @@ class BankStub(object):
                 )
         self.Query = channel.unary_unary(
                 '/Bank/Query',
-                request_serializer=bank__pb2.GeneralRequest.SerializeToString,
+                request_serializer=bank__pb2.QueryRequest.SerializeToString,
                 response_deserializer=bank__pb2.QueryReply.FromString,
                 )
         self.BranchDeposit = channel.unary_unary(
@@ -89,7 +89,7 @@ def add_BankServicer_to_server(servicer, server):
             ),
             'Query': grpc.unary_unary_rpc_method_handler(
                     servicer.Query,
-                    request_deserializer=bank__pb2.GeneralRequest.FromString,
+                    request_deserializer=bank__pb2.QueryRequest.FromString,
                     response_serializer=bank__pb2.QueryReply.SerializeToString,
             ),
             'BranchDeposit': grpc.unary_unary_rpc_method_handler(
@@ -158,7 +158,7 @@ class Bank(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Bank/Query',
-            bank__pb2.GeneralRequest.SerializeToString,
+            bank__pb2.QueryRequest.SerializeToString,
             bank__pb2.QueryReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

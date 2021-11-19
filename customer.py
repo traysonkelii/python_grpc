@@ -1,3 +1,4 @@
+from time import sleep
 import grpc
 import bank_pb2
 import bank_pb2_grpc
@@ -6,38 +7,33 @@ class Customer:
     def __init__(self, id, events):
         self.id = id
         self.events = events
-        # Mapping to proper id
-        self.stub = self.createStub()
 
-    def createStub(self):
-        # Mapping from self id to Branch id
-        host = 'localhost:' + str(50050 + self.id)
+    def createStub(self, num):
+        
+        host = 'localhost:' + str(50050 + num)
         channel = grpc.insecure_channel(host)
         stub = bank_pb2_grpc.BankStub(channel)
         return stub
 
-    # needs to run on it's own thread to handle concurrency
     def executeEvents(self):
         responses = []
         for event in self.events:
+            # dynamic stub creation based on the dest value of the event
+            stub = self.createStub(event.dest)
             interface = event.interface
-            money = event.money
-            responses.append(self.commandMapping(interface, money))
+            if(interface == 'withdraw'):
+                money = event.money
+                response = stub.Withdraw(bank_pb2.GeneralRequest(interface='withdraw', money=int(money)))
+            if(interface == 'deposit'):
+                money = event.money
+                response = stub.Deposit(bank_pb2.GeneralRequest(interface='deposit', money=int(money)))
+            if(interface == 'query'):
+                # stops the process from reading branches that have not been written yet
+                sleep(3)
+                data = {}
+                response = stub.Query(bank_pb2.QueryRequest(id=str(self.id), money=0))
+                data['id'] = self.id
+                data['balance'] = response.money
+                responses.append(data)
         return responses
 
-    def commandMapping(self, interface, money):
-        formatted = {}
-        if(interface == 'withdraw'):
-            response = self.stub.Withdraw(bank_pb2.GeneralRequest(interface='withdraw', money=int(money)))
-            formatted['interface'] = response.interface
-            formatted['result'] = response.result
-        if(interface == 'deposit'):
-            response = self.stub.Deposit(bank_pb2.GeneralRequest(interface='deposit', money=int(money)))
-            formatted['interface'] = response.interface
-            formatted['result'] = response.result
-        if(interface == 'query'):
-            response = self.stub.Query(bank_pb2.GeneralRequest(interface='query', money=int(money)))
-            formatted['interface'] = response.interface
-            formatted['result'] = response.result
-            formatted['money'] = response.money
-        return formatted

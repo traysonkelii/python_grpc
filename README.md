@@ -3,7 +3,7 @@
 This lab was implemented via `python 3.8.5`. 
 
 ## How to use
-- Place a formatted json file named `input.json` in the root directory (note that one is already provided in this repository). The json object should contain an equal number of customer and branch processes. There should be a one to one mapping between `customer id` and `branch id`. All starting `balance`'s of any `branch` referenced should be the same amount upon starting the application. (example can be found below)
+- Place a formatted json file named `input.json` in the root directory (note that one is already provided in this repository). All starting `balance`'s of any `branch` referenced should be the same amount upon starting the application. (example can be found below)
 - run the following sequences of python commands from the root directory to execute the program to initialize the branches:
 ```
 # generates the pb2 files
@@ -20,30 +20,32 @@ python execute_customer_events.py
 
 ## Example Input
 ```
-[{ 'id': 1, 'type': 'customer',
-    events: [
-        { 'id': 1, interface: 'query', money: 400 }
-    ]},
-  { 'id': 2, 'type': 'customer',
-    'events': [
-        { 'id': 2, 'interface': 'deposit', 'money': 170 },
-        { 'id': 3, 'interface': 'query', 'money': 400 }
-    ]},
-  { 'id': 3, 'type': 'customer',
-    'events': [
-      { 'id': 4, 'interface': 'withdraw', 'money': 70 },
-      { 'id': 5, 'interface': 'query', 'money': 400 }
-    ]},
-  { 'id': 1, 'type': 'branch', 'balance': 400 },
-  { 'id': 2, 'type': 'branch', 'balance': 400 },
-  { 'id': 3, 'type': 'branch', 'balance': 400}]
+[
+  {
+    "id": 1,
+    "type": "customer",
+    "events": [
+      { "interface": "deposit", "money": 400, "dest": 1 },
+      { "interface": "query", "dest": 2 }
+    ]
+  },
+  {
+    "id": 1,
+    "type": "bank",
+    "balance": 0
+  },
+  {
+    "id": 2,
+    "type": "bank",
+    "balance": 0
+  }
+]
+
 ```
 
 ## Example Output
 ```
-{'id': 1, 'recv': [{'interface': 'query', 'result': 'success', 'money': 500}]}
-  {'id': 2, 'recv': [{'interface': 'deposit', 'result': 'success'}, {'interface': 'query', 'result': 'success', 'money': 500}]}
-  {'id': 3, 'recv': [{'interface': 'withdraw', 'result': 'success'}, {'interface': 'query', 'result': 'success', 'money': 500}]}
+[{"id": 1, "balance": 400}]
 ```
 
 ## Extra Testing

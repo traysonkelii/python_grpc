@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nbank.proto\"1\n\x0cGeneralReply\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\"2\n\x0eGeneralRequest\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\r\n\x05money\x18\x02 \x01(\x05\">\n\nQueryReply\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"\x1e\n\rBranchRequest\x12\r\n\x05money\x18\x01 \x01(\x05\"!\n\x0e\x42ranchResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\xf3\x01\n\x04\x42\x61nk\x12,\n\x08Withdraw\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12+\n\x07\x44\x65posit\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12\'\n\x05Query\x12\x0f.GeneralRequest\x1a\x0b.QueryReply\"\x00\x12\x32\n\rBranchDeposit\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x12\x33\n\x0e\x42ranchWithdraw\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\nbank.proto\"1\n\x0cGeneralReply\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\t\"2\n\x0eGeneralRequest\x12\x11\n\tinterface\x18\x01 \x01(\t\x12\r\n\x05money\x18\x02 \x01(\x05\")\n\x0cQueryRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05money\x18\x02 \x01(\x05\"\'\n\nQueryReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05money\x18\x02 \x01(\x05\"\x1e\n\rBranchRequest\x12\r\n\x05money\x18\x01 \x01(\x05\"!\n\x0e\x42ranchResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\xf1\x01\n\x04\x42\x61nk\x12,\n\x08Withdraw\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12+\n\x07\x44\x65posit\x12\x0f.GeneralRequest\x1a\r.GeneralReply\"\x00\x12%\n\x05Query\x12\r.QueryRequest\x1a\x0b.QueryReply\"\x00\x12\x32\n\rBranchDeposit\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x12\x33\n\x0e\x42ranchWithdraw\x12\x0e.BranchRequest\x1a\x0f.BranchResponse\"\x00\x62\x06proto3'
 )
 
 
@@ -103,31 +103,24 @@ _GENERALREQUEST = _descriptor.Descriptor(
 )
 
 
-_QUERYREPLY = _descriptor.Descriptor(
-  name='QueryReply',
-  full_name='QueryReply',
+_QUERYREQUEST = _descriptor.Descriptor(
+  name='QueryRequest',
+  full_name='QueryRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='interface', full_name='QueryReply.interface', index=0,
+      name='id', full_name='QueryRequest.id', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='result', full_name='QueryReply.result', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='money', full_name='QueryReply.money', index=2,
-      number=3, type=5, cpp_type=1, label=1,
+      name='money', full_name='QueryRequest.money', index=1,
+      number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -145,7 +138,46 @@ _QUERYREPLY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=117,
-  serialized_end=179,
+  serialized_end=158,
+)
+
+
+_QUERYREPLY = _descriptor.Descriptor(
+  name='QueryReply',
+  full_name='QueryReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='QueryReply.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='money', full_name='QueryReply.money', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=160,
+  serialized_end=199,
 )
 
 
@@ -176,8 +208,8 @@ _BRANCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=181,
-  serialized_end=211,
+  serialized_start=201,
+  serialized_end=231,
 )
 
 
@@ -208,12 +240,13 @@ _BRANCHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=213,
-  serialized_end=246,
+  serialized_start=233,
+  serialized_end=266,
 )
 
 DESCRIPTOR.message_types_by_name['GeneralReply'] = _GENERALREPLY
 DESCRIPTOR.message_types_by_name['GeneralRequest'] = _GENERALREQUEST
+DESCRIPTOR.message_types_by_name['QueryRequest'] = _QUERYREQUEST
 DESCRIPTOR.message_types_by_name['QueryReply'] = _QUERYREPLY
 DESCRIPTOR.message_types_by_name['BranchRequest'] = _BRANCHREQUEST
 DESCRIPTOR.message_types_by_name['BranchResponse'] = _BRANCHRESPONSE
@@ -232,6 +265,13 @@ GeneralRequest = _reflection.GeneratedProtocolMessageType('GeneralRequest', (_me
   # @@protoc_insertion_point(class_scope:GeneralRequest)
   })
 _sym_db.RegisterMessage(GeneralRequest)
+
+QueryRequest = _reflection.GeneratedProtocolMessageType('QueryRequest', (_message.Message,), {
+  'DESCRIPTOR' : _QUERYREQUEST,
+  '__module__' : 'bank_pb2'
+  # @@protoc_insertion_point(class_scope:QueryRequest)
+  })
+_sym_db.RegisterMessage(QueryRequest)
 
 QueryReply = _reflection.GeneratedProtocolMessageType('QueryReply', (_message.Message,), {
   'DESCRIPTOR' : _QUERYREPLY,
@@ -263,8 +303,8 @@ _BANK = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=249,
-  serialized_end=492,
+  serialized_start=269,
+  serialized_end=510,
   methods=[
   _descriptor.MethodDescriptor(
     name='Withdraw',
@@ -291,7 +331,7 @@ _BANK = _descriptor.ServiceDescriptor(
     full_name='Bank.Query',
     index=2,
     containing_service=None,
-    input_type=_GENERALREQUEST,
+    input_type=_QUERYREQUEST,
     output_type=_QUERYREPLY,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
