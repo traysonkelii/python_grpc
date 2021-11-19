@@ -18,7 +18,7 @@ python execute_customer_events.py
 ```
 - Upon completion an `output.json` will be generated and with the corresponding transaction status
 
-## Example Input
+## Example Input - Read your Write consistency
 ```
 [
   {
@@ -43,26 +43,38 @@ python execute_customer_events.py
 
 ```
 
-## Example Output
+## Example Output - Read your Write consistency
 ```
 [{"id": 1, "balance": 400}]
 ```
 
-## Extra Testing
+## Example Input - 	Monotonic Write consistency
+```
+[
+  {
+    "id": 1,
+    "type": "customer",
+    "events": [
+      { "interface": "deposit", "money": 400, "dest": 1 },
+      { "interface": "withdraw", "money": 400, "dest": 2 },
+      { "interface": "query", "dest": 2 }
+    ]
+  },
+  {
+    "id": 1,
+    "type": "bank",
+    "balance": 0
+  },
+  {
+    "id": 2,
+    "type": "bank",
+    "balance": 0
+  }
+]
 
-After running `python create_branches.py` you can further test the individual operations (Withdraw, Deposit, and Query) by executing the following commands (note that the specific setup defined for the input.json will be `50051`, `50052`, and `50053`): 
-
-Withdraw
-```
-python withdraw.py [PORT] [AMOUNT_TO_WITHDRAW]
 ```
 
-Deposit
+## Example Output -	Monotonic Write consistency:
 ```
-python withdraw.py [PORT] [AMOUNT_TO_DEPOSIT]
-```
-
-Query
-```
-python withdraw.py [PORT] [PLACE_HOLDER_AMOUNT]
+[{"id": 1, "balance": 0}]
 ```
